@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.midnightsnack.dao.CartItemDao">
+
+    <!-- 结果映射 -->
+    <resultMap id="CartItemResultMap" type="com.midnightsnack.entity.CartItem">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!-- 包含商品信息的结果映射 -->
+    <resultMap id="CartItemWithProductResultMap" type="com.midnightsnack.entity.CartItem">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="product" javaType="com.midnightsnack.entity.Product">
+            <id property="id" column="p_id"/>
+            <result property="productCode" column="product_code"/>
+            <result property="merchantId" column="merchant_id"/>
+            <result property="categoryId" column="category_id"/>
+            <result property="name" column="p_name"/>
+            <result property="description" column="description"/>
+            <result property="price" column="price"/>
+            <result property="originalPrice" column="original_price"/>
+            <result property="image" column="image"/>
+            <result property="stock" column="stock"/>
+            <result property="salesCount" column="sales_count"/>
+            <result property="isRecommended" column="is_recommended"/>
+            <result property="status" column="p_status"/>
+            <result property="merchantName" column="merchant_name"/>
+            <result property="categoryName" column="category_name"/>
+        </association>
+    </resultMap>
+
+    <!-- 插入购物车项 -->
+    <insert id="insert" parameterType="com.midnightsnack.entity.CartItem" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO cart_items (user_id, product_id, quantity)
+        VALUES (#{userId}, #{productId}, #{quantity})
+    </insert>
+
+    <!-- 根据ID查询 -->
+    <select id="selectById" resultMap="CartItemResultMap">
+        SELECT * FROM cart_items WHERE id = #{id}
+    </select>
+
+    <!-- 根据用户ID和商品ID查询 -->
+    <select id="selectByUserIdAndProductId" resultMap="CartItemResultMap">
+        SELECT * FROM cart_items
+        WHERE user_id = #{userId} AND product_id = #{productId}
+    </select>
+
+    <!-- 查询用户的购物车列表（包含商品信息） -->
+    <select id="selectByUserId" resultMap="CartItemWithProductResultMap">
+        SELECT
+            ci.id,
+            ci.user_id,
+            ci.product_id,
+            ci.quantity,
+            ci.create_time,
+            ci.update_time,
+            p.id AS p_id,
+            p.product_code,
+            p.merchant_id,
+            p.category_id,
+            p.name AS p_name,
+            p.description,
+            p.price,
+            p.original_price,
+            p.image,
+            p.stock,
+            p.sales_count,
+            p.is_recommended,
+            p.status AS p_status,
+            m.name AS merchant_name,
+            c.name AS category_name
+        FROM cart_items ci
+        LEFT JOIN products p ON ci.product_id = p.id
+        LEFT JOIN merchants m ON p.merchant_id = m.id
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE ci.user_id = #{userId}
+        ORDER BY ci.create_time DESC
+    </select>
+
+    <!-- 更新购物车项 -->
+    <update id="update" parameterType="com.midnightsnack.entity.CartItem">
+        UPDATE cart_items
+        SET quantity = #{quantity},
+            update_time = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+
+    <!-- 更新购物车项数量 -->
+    <update id="updateQuantity">
+        UPDATE cart_items
+        SET quantity = #{quantity},
+            update_time = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除购物车项 -->
+    <delete id="deleteById">
+        DELETE FROM cart_items WHERE id = #{id}
+    </delete>
+
+    <!-- 批量删除购物车项 -->
+    <delete id="deleteByIds">
+        DELETE FROM cart_items
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 清空用户购物车 -->
+    <delete id="deleteByUserId">
+        DELETE FROM cart_items WHERE user_id = #{userId}
+    </delete>
+
+    <!-- 统计用户购物车商品数量 -->
+    <select id="countByUserId" resultType="int">
+        SELECT COALESCE(SUM(quantity), 0) FROM cart_items WHERE user_id = #{userId}
+    </select>
+
+</mapper>

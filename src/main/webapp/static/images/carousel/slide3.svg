@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400">
+  <defs>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4facfe;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00f2fe;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="400" fill="url(#grad3)"/>
+  <text x="600" y="180" font-family="Arial, sans-serif" font-size="48" fill="white" text-anchor="middle" font-weight="bold">优惠活动</text>
+  <text x="600" y="240" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">新用户立减10元 🎉</text>
+</svg>

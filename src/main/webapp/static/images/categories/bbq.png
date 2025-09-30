@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="bbqGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FA8072;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E9967A;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="90" fill="url(#bbqGrad)" opacity="0.1"/>
+  <!-- 烤串棍 -->
+  <line x1="50" y1="120" x2="150" y2="80" stroke="#8B4513" stroke-width="4" stroke-linecap="round"/>
+  <!-- 肉块1 -->
+  <ellipse cx="70" cy="110" rx="15" ry="12" fill="#A0522D" stroke="#8B4513" stroke-width="2"/>
+  <ellipse cx="70" cy="110" rx="12" ry="9" fill="#D2691E"/>
+  <!-- 肉块2 -->
+  <ellipse cx="90" cy="102" rx="16" ry="13" fill="#A0522D" stroke="#8B4513" stroke-width="2"/>
+  <ellipse cx="90" cy="102" rx="13" ry="10" fill="#CD853F"/>
+  <!-- 肉块3 -->
+  <ellipse cx="110" cy="94" rx="15" ry="12" fill="#A0522D" stroke="#8B4513" stroke-width="2"/>
+  <ellipse cx="110" cy="94" rx="12" ry="9" fill="#D2691E"/>
+  <!-- 肉块4 -->
+  <ellipse cx="130" cy="86" rx="16" ry="13" fill="#A0522D" stroke="#8B4513" stroke-width="2"/>
+  <ellipse cx="130" cy="86" rx="13" ry="10" fill="#CD853F"/>
+  <!-- 烤痕 -->
+  <line x1="67" y1="106" x2="73" y2="114" stroke="#8B4513" stroke-width="2"/>
+  <line x1="87" y1="98" x2="93" y2="106" stroke="#8B4513" stroke-width="2"/>
+  <line x1="107" y1="90" x2="113" y2="98" stroke="#8B4513" stroke-width="2"/>
+  <line x1="127" y1="82" x2="133" y2="90" stroke="#8B4513" stroke-width="2"/>
+  <!-- 火焰效果 -->
+  <path d="M 75 125 Q 70 130 72 135 Q 75 132 78 135" fill="#FF4500" opacity="0.6"/>
+  <path d="M 95 117 Q 90 122 92 127 Q 95 124 98 127" fill="#FF6347" opacity="0.6"/>
+  <path d="M 115 109 Q 110 114 112 119 Q 115 116 118 119" fill="#FF4500" opacity="0.6"/>
+</svg>

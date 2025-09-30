@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.midnightsnack.dao.ProductDao">
+
+    <!-- 结果映射 -->
+    <resultMap id="ProductResultMap" type="com.midnightsnack.entity.Product">
+        <id property="id" column="id"/>
+        <result property="productCode" column="product_code"/>
+        <result property="merchantId" column="merchant_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="price" column="price"/>
+        <result property="originalPrice" column="original_price"/>
+        <result property="image" column="image"/>
+        <result property="stock" column="stock"/>
+        <result property="salesCount" column="sales_count"/>
+        <result property="isRecommended" column="is_recommended"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="merchantName" column="merchant_name"/>
+        <result property="categoryName" column="category_name"/>
+    </resultMap>
+
+    <!-- 根据ID查询商品 -->
+    <select id="selectById" resultMap="ProductResultMap">
+        SELECT
+            p.*,
+            m.name AS merchant_name,
+            c.name AS category_name
+        FROM products p
+        LEFT JOIN merchants m ON p.merchant_id = m.id
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE p.id = #{id}
+    </select>
+
+    <!-- 查询所有上架商品 -->
+    <select id="selectAllAvailable" resultMap="ProductResultMap">
+        SELECT
+            p.*,
+            m.name AS merchant_name,
+            c.name AS category_name
+        FROM products p
+        LEFT JOIN merchants m ON p.merchant_id = m.id
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE p.status = 1 AND m.status = 1
+        ORDER BY p.create_time DESC
+    </select>
+
+    <!-- 根据分类查询商品 -->
+    <select id="selectByCategoryId" resultMap="ProductResultMap">
+        SELECT
+            p.*,
+            m.name AS merchant_name,
+            c.name AS category_name
+        FROM products p
+        LEFT JOIN merchants m ON p.merchant_id = m.id
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE p.category_id = #{categoryId} AND p.status = 1 AND m.status = 1
+        ORDER BY p.sales_count DESC
+    </select>
+
+    <!-- 查询推荐商品 -->
+    <select id="selectRecommended" resultMap="ProductResultMap">
+        SELECT
+            p.*,
+            m.name AS merchant_name,
+            c.name AS category_name
+        FROM products p
+        LEFT JOIN merchants m ON p.merchant_id = m.id
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE p.is_recommended = 1 AND p.status = 1 AND m.status = 1
+        ORDER BY p.sales_count DESC
+        LIMIT #{limit}
+    </select>
+
+    <!-- 查询热销商品 -->
+    <select id="selectHotSales" resultMap="ProductResultMap">
+        SELECT
+            p.*,
+            m.name AS merchant_name,
+            c.name AS category_name
+        FROM products p
+        LEFT JOIN merchants m ON p.merchant_id = m.id
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE p.status = 1 AND m.status = 1
+        ORDER BY p.sales_count DESC
+        LIMIT #{limit}
+    </select>
+
+    <!-- 查询最新商品 -->
+    <select id="selectLatest" resultMap="ProductResultMap">
+        SELECT
+            p.*,
+            m.name AS merchant_name,
+            c.name AS category_name
+        FROM products p
+        LEFT JOIN merchants m ON p.merchant_id = m.id
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE p.status = 1 AND m.status = 1
+        ORDER BY p.create_time DESC
+        LIMIT #{limit}
+    </select>
+
+    <!-- 搜索商品 -->
+    <select id="searchProducts" resultMap="ProductResultMap">
+        SELECT
+            p.*,
+            m.name AS merchant_name,
+            c.name AS category_name
+        FROM products p
+        LEFT JOIN merchants m ON p.merchant_id = m.id
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE p.status = 1 AND m.status = 1
+        AND (p.name LIKE CONCAT('%', #{keyword}, '%')
+            OR p.description LIKE CONCAT('%', #{keyword}, '%')
+            OR p.product_code LIKE CONCAT('%', #{keyword}, '%'))
+        ORDER BY p.sales_count DESC
+    </select>
+
+</mapper>
